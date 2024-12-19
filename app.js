@@ -41,14 +41,22 @@ let customerIdCounter = customers.length ? Math.max(...customers.map(c => c.id))
 
 // Get all books
 app.get('/books', (req, res) => {
-  res.json(books);
+  const booksWithCustomers = books.map(book => {
+    if (book.pickedBy) {
+      const customer = customers.find(c => c.id === book.pickedBy);
+      return { ...book, pickedBy: customer || null };
+    }
+    return book;
+  });
+  res.json(booksWithCustomers);
 });
 
 // Get a single book
 app.get('/books/:id', (req, res) => {
   const book = books.find(b => b.id === parseInt(req.params.id));
   if (book) {
-    res.json(book);
+    const customer = book.pickedBy ? customers.find(c => c.id === book.pickedBy) : null;
+    res.json({ ...book, pickedBy: customer || null });
   } else {
     res.status(404).json({ message: 'Book not found' });
   }
@@ -67,7 +75,7 @@ app.post('/books', (req, res) => {
 app.put('/books/:id', (req, res) => {
   const book = books.find(b => b.id === parseInt(req.params.id));
   if (book) {
-    const { title, author, isPicked, pickingDate, pickedBy } = req.body;
+    const { title, author, isPicked, pickingDate, pickedBy, pages } = req.body;
     if (title !== undefined) book.title = title;
     if (author !== undefined) book.author = author;
     if (isPicked !== undefined) book.isPicked = isPicked;
