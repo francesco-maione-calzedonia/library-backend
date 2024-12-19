@@ -56,8 +56,8 @@ app.get('/books/:id', (req, res) => {
 
 // Create a new book
 app.post('/books', (req, res) => {
-  const { title, author, isPicked = false, pickingDate = null, pickedBy = null } = req.body;
-  const newBook = { id: bookIdCounter++, title, author, isPicked, pickingDate, pickedBy };
+  const { title, author, isPicked = false, pickingDate = null, pickedBy = null, pages = null } = req.body;
+  const newBook = { id: bookIdCounter++, title, author, isPicked, pickingDate, pickedBy, pages };
   books.push(newBook);
   writeData(booksFilePath, books);
   res.status(201).json(newBook);
@@ -73,6 +73,7 @@ app.put('/books/:id', (req, res) => {
     if (isPicked !== undefined) book.isPicked = isPicked;
     if (pickingDate !== undefined) book.pickingDate = pickingDate;
     if (pickedBy !== undefined) book.pickedBy = pickedBy;
+    if (pages !== undefined) book.pages = pages;
     writeData(booksFilePath, books);
     res.json(book);
   } else {
