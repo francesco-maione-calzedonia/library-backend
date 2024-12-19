@@ -258,3 +258,7 @@ Deletes a customer by their ID.
 - Make sure the server is running on `http://localhost:3000` before making requests.
 - For `pickedBy` in books, if a customer ID is invalid or not found, it defaults to `null`.
 
+## Changelog
+
+### [1.1.0] - 2024-12-18
+- Updated `/books` and `/books/:id` endpoints to include the full customer object in the `pickedBy` field instead of just the ID.
